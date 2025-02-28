@@ -1,1 +1,1 @@
-# pnpm-local-install
+# pnpm-workspace-install
