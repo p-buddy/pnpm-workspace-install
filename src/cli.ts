@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from '@commander-js/extra-typings';
 import { version } from '../package.json';
-import { findAllWorkspacePackages, findMatchingPackage, findRoot } from './';
+import { findAllWorkspacePackages, findMatchingPackage, findRoot } from '.';
 import { execSync } from "node:child_process";
 
 const program = new Command()
