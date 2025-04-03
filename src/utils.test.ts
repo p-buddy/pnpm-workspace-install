@@ -10,7 +10,7 @@ describe(findMatchingPackage.name, () => {
       findUpSync: vi.fn(() => "dummy"),
     }));
 
-    vi.mock("fs", () => ({
+    vi.mock("node:fs", () => ({
       readFileSync: vi.fn(() => JSON.stringify({ name: "base" })),
     }));
 

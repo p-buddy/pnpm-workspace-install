@@ -1,6 +1,6 @@
 import { findUpSync } from 'find-up';
-import { readFileSync } from 'fs';
-import { dirname, join, resolve } from 'path';
+import { readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { parse } from "yaml";
 import { sync } from "glob";
 
