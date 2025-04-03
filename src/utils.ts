@@ -28,21 +28,21 @@ export const findAllWorkspacePackages = (root?: string) =>
 export const findMatchingPackage = (
   packages: Set<string>, pkgName: string, root?: string, pkgPrefix?: string,
 ) => {
-  if (pkgPrefix === undefined)
-    try {
-      const result = findMatchingPackage(packages, pkgName, root, "");
-      if (result) return result;
-    }
-    catch { }
-
-  pkgPrefix = getPackageName(join(root ?? findRoot(), "package.json"));
-
-  if (!pkgName.startsWith(pkgPrefix)) pkgName = pkgPrefix + pkgName;
   if (packages.has(pkgName)) return pkgName;
+  const arr = Array.from(packages);
 
-  const matches = Array.from(packages).filter(pkg => pkg.startsWith(pkgName));
+  const nonPrefixed = arr.filter(pkg => pkg.startsWith(pkgName));
+  if (nonPrefixed.length === 1) return nonPrefixed[0];
 
-  if (matches.length === 1) return matches[0];
-  if (matches.length > 1) throw new Error(`Ambiguous package name: ${pkgName}`);
-  throw new Error(`Package not found: ${pkgName}`);
+  pkgPrefix ??= getPackageName(join(root ?? findRoot(), "package.json"));
+
+  const prefixed = arr.filter(pkg => pkg.startsWith(pkgPrefix + pkgName));
+  if (prefixed.length === 1) return prefixed[0];
+
+  const prefixedWithDash = arr.filter(pkg => pkg.startsWith(pkgPrefix + "-" + pkgName));
+  if (prefixedWithDash.length === 1) return prefixedWithDash[0];
+
+  if (nonPrefixed.length === 0 && prefixed.length === 0 && prefixedWithDash.length === 0)
+    throw new Error(`Package not found: '${pkgName}' (including prefix: '${pkgPrefix + pkgName}' and prefixed with dash: '${pkgPrefix + "-" + pkgName}')`);
+  throw new Error(`Ambiguous package name: ${pkgName}\nCandidates:\n-${[...nonPrefixed, ...prefixed, ...prefixedWithDash].join("\n-")}`);
 }

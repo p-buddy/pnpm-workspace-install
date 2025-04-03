@@ -9,17 +9,18 @@ const program = new Command()
   .option('-d, --debug')
   .requiredOption('-p, --pkg <pkg>', 'Package name to install')
   .requiredOption('-f, --filter <filter>', 'Filter target for installation')
+  .option('-x, --prefix <prefix>', 'Prefix for the package name')
   .parse();
 
-const { pkg, filter } = program.opts();
+const { pkg, filter, prefix } = program.opts();
 
 try {
   const root = findRoot();
   console.log(`(Using '${root}' as root)`);
 
   const packages = findAllWorkspacePackages(root);
-  const resolvedPkg = findMatchingPackage(packages, pkg, root);
-  const resolvedFilter = findMatchingPackage(packages, filter, root);
+  const resolvedPkg = findMatchingPackage(packages, pkg, root, prefix);
+  const resolvedFilter = findMatchingPackage(packages, filter, root, prefix);
 
   console.log(`Installing ${resolvedPkg} into ${resolvedFilter}...`);
 
