@@ -1,5 +1,5 @@
 import { findUpSync } from 'find-up';
-import { readFileSync } from 'node:fs';
+import { readFileSync, } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { parse } from "yaml";
 import { sync } from "glob";
@@ -10,7 +10,7 @@ export const findRoot = () => {
   return dirname(workspaceFile);
 }
 
-const getPackageName = (path: string): string => JSON.parse(readFileSync(path, "utf8")).name;
+export const getPackageName = (path: string): string => JSON.parse(readFileSync(path, "utf8")).name;
 
 const getWorkspacePatterns = (root?: string): string[] =>
   parse(readFileSync(join(root ?? findRoot(), "pnpm-workspace.yaml"), "utf8")).packages ?? [];

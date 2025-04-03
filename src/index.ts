@@ -1,1 +1,1 @@
-export { findMatchingPackage, findRoot, findAllWorkspacePackages } from "./utils";
+export { findMatchingPackage, findRoot, findAllWorkspacePackages, getPackageName } from "./utils";
