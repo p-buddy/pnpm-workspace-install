@@ -42,7 +42,10 @@ export const findMatchingPackage = (
   const prefixedWithDash = arr.filter(pkg => pkg.startsWith(pkgPrefix + "-" + pkgName));
   if (prefixedWithDash.length === 1) return prefixedWithDash[0];
 
-  if (nonPrefixed.length === 0 && prefixed.length === 0 && prefixedWithDash.length === 0)
-    throw new Error(`Package not found: '${pkgName}' (including prefix: '${pkgPrefix + pkgName}' and prefixed with dash: '${pkgPrefix + "-" + pkgName}')`);
-  throw new Error(`Ambiguous package name: ${pkgName}\nCandidates:\n-${[...nonPrefixed, ...prefixed, ...prefixedWithDash].join("\n-")}`);
+  const prefixedWithSlash = arr.filter(pkg => pkg.startsWith(pkgPrefix + "/" + pkgName));
+  if (prefixedWithSlash.length === 1) return prefixedWithSlash[0];
+
+  if (nonPrefixed.length === 0 && prefixed.length === 0 && prefixedWithDash.length === 0 && prefixedWithSlash.length === 0)
+    throw new Error(`Package not found: '${pkgName}' (including prefix: '${pkgPrefix + pkgName}' and prefixed with dash: '${pkgPrefix + "-" + pkgName}' and prefixed with slash: '${pkgPrefix + "/" + pkgName}')`);
+  throw new Error(`Ambiguous package name: ${pkgName}\nCandidates:\n-${[...nonPrefixed, ...prefixed, ...prefixedWithDash, ...prefixedWithSlash].join("\n-")}`);
 }
