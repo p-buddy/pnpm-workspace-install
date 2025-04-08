@@ -12,9 +12,10 @@ const program = new Command()
   .option('-p, --pkg <pkg>', 'Package name to install (can also be provided as the first-and-only positional argument)')
   .option('-f, --filter <filter>', 'Filter target for installation')
   .option('-x, --prefix <prefix>', 'Prefix for the package name')
+  .option('-D, --save-dev', 'Install as devDependency')
   .parse();
 
-let { pkg, filter, prefix, debug } = program.opts();
+let { pkg, filter, prefix, debug, saveDev } = program.opts();
 
 pkg ??= program.args[0];
 
@@ -36,7 +37,8 @@ try {
 
   console.log(`Installing '${resolvedPkg}' into '${resolvedFilter}'...`);
 
-  const command = `pnpm add -D "workspace:${resolvedPkg}@*" --filter ${resolvedFilter}`;
+  const devFlag = saveDev ? ' -D' : '';
+  const command = `pnpm add${devFlag} "workspace:${resolvedPkg}@*" --filter ${resolvedFilter}`;
 
   if (debug) console.log(`Would run: ${command}`);
   else execSync(command, { stdio: "inherit" });
